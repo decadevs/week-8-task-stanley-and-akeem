@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TrackPartner</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="open_map_activity">Open Map Activity</string>
+    <string name="track_partner">TrackPartner</string>
+    <string name="track_a_partner">Realtime tracking app</string>
+
+</resources>
