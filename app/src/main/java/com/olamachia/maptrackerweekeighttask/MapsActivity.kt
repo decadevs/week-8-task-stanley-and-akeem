@@ -1,6 +1,7 @@
 package com.olamachia.maptrackerweekeighttask
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -21,23 +22,26 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.olamachia.maptrackerweekeighttask.pokemonapp.PokemonActivity
 import java.util.concurrent.TimeUnit
 
-//TODO: Database is not getting updates
 //TODO: The location is not updating when I move
+//TODO: Try changing myFirebaseData in onLocationResult() to parse all the result from the location request
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var map: GoogleMap
 
-    //    private var database: FirebaseDatabase = FirebaseDatabase.getInstance()
+//    private var database: FirebaseDatabase = FirebaseDatabase.getInstance()
 //    private var dbReference: DatabaseReference = Firebase.database.getReference("RotimiLocation")
 
     //reference to the database
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private val dbReference: DatabaseReference = database.getReference("stanley")
+    private val dbReference: DatabaseReference = database.getReference("Users")
 
     // LocationRequest - Requirements for the location updates, i.e., how often you
     // should receive updates, the priority, etc.
@@ -58,6 +62,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //        dbReference = Firebase.database.reference
 //        dbReference.addValueEventListener(locListener)
 
+        //initialize the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        //set image upload activity selected
+        bottomNavigationView.selectedItemId = R.id.map
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.pokemon -> pokemon()
+                R.id.map -> null
+
+            }
+            true
+        }
+
+    }
+
+    private fun pokemon() {
+        val intent = Intent(this, PokemonActivity::class.java)
+        startActivity(intent)
     }
 
     private lateinit var fusedLocClient: FusedLocationProviderClient
@@ -66,6 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap //initialise map
         getCurrentLocation()
+        getPartnerLocation()
     }
 
     private fun setupLocClient() {
@@ -83,49 +107,122 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        private const val REQUEST_LOCATION = 1 //request code to identify specific permission request
+        private const val REQUEST_LOCATION =
+            1 //request code to identify specific permission request
         private const val TAG = "MapsActivity" // for debugging
     }
 
-    val locListener = object : ValueEventListener {
-        //     @SuppressLint("LongLogTag")
-        override fun onDataChange(snapshot: DataSnapshot) {
-            if (snapshot.exists()) {
-                //get the exact longitude and latitude from the database "test"
-                val location = snapshot.child("RotimiLocation").getValue(LocationInfo::class.java)
-                val locationLat = location?.latitude
-                val locationLong = location?.longitude
-                //trigger reading of location from database using the button
+    private fun getPartnerLocation() {
+        // Check if the ACCESS_FINE_LOCATION permission was granted before requesting a location
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            // call requestLocPermissions() if permission isn't granted
+            requestLocPermissions()
+        } else {
+            dbReference.addValueEventListener(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        //get the exact longitude and latitude from the database "test"
+                        val location = snapshot.child("RotimiLocation").getValue(LocationInfo::class.java)
+                        val locationLat = location?.latitude
+                        val locationLong = location?.longitude
+                        //trigger reading of location from database using the button
 
-                // check if the latitude and longitude is not null
-                if (locationLat != null && locationLong != null) {
-                    // create a LatLng object from location
-                    val latLng = LatLng(locationLat, locationLong)
-                    //create a marker at the read location and display it on the map
-                    map.addMarker(
-                        MarkerOptions().position(latLng)
-                            .title("The user is currently here")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.akeem_rotimi))
-                    )
-                    //specify how the map camera is updated
-                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
-                    //update the camera with the CameraUpdate object
-                    map.moveCamera(update)
-                } else {
-                    // if location is null , log an error message
-                    Log.e(TAG, "user location cannot be found")
+                        // check if the latitude and longitude is not null
+                        if (locationLat != null && locationLong != null) {
+                            // create a LatLng object from location
+                            val latLng = LatLng(locationLat, locationLong)
+                            //create a marker at the read location and display it on the map
+                            map.addMarker(
+                                MarkerOptions().position(latLng)
+                                    .title("The user is currently here")
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.akeem_rotimi))
+                            )
+                            //specify how the map camera is updated
+                            val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+                            //update the camera with the CameraUpdate object
+                            map.moveCamera(update)
+                        } else {
+                            // if location is null , log an error message
+                            Log.e(TAG, "user location cannot be found")
+                        }
+
+                    }
                 }
 
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(applicationContext, "Could not read from database", Toast.LENGTH_LONG)
+                        .show()
+                }
+
+            })
+            fusedLocClient.lastLocation.addOnCompleteListener {
+                // lastLocation is a task running in the background
+                val location = it.result //obtain location
+                //reference to the database
+                if (location != null) {
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    // create a marker at the exact location
+                    map.addMarker(
+                        MarkerOptions().position(latLng)
+                            .title("You are currently here!")
+                        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    )
+                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.akeem_rotimi))
+                    // create an object that will specify how the camera will be updated
+                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+                    map.moveCamera(update)
+                    //Save the location data to the database
+                } else {
+                    // if location is null , log an error message
+                    Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show()
+                    // Log.e(TAG, "No location found")
+                }
             }
         }
 
+//    val locListener = object : ValueEventListener {
+//        //     @SuppressLint("LongLogTag")
+//        override fun onDataChange(snapshot: DataSnapshot) {
+//            if (snapshot.exists()) {
+//                //get the exact longitude and latitude from the database "test"
+//                val location = snapshot.child("RotimiLocation").getValue(LocationInfo::class.java)
+//                val locationLat = location?.latitude
+//                val locationLong = location?.longitude
+//                //trigger reading of location from database using the button
+//
+//                // check if the latitude and longitude is not null
+//                if (locationLat != null && locationLong != null) {
+//                    // create a LatLng object from location
+//                    val latLng = LatLng(locationLat, locationLong)
+//                    //create a marker at the read location and display it on the map
+//                    map.addMarker(
+//                        MarkerOptions().position(latLng)
+//                            .title("The user is currently here")
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.akeem_rotimi))
+//                    )
+//                    //specify how the map camera is updated
+//                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+//                    //update the camera with the CameraUpdate object
+//                    map.moveCamera(update)
+//                } else {
+//                    // if location is null , log an error message
+//                    Log.e(TAG, "user location cannot be found")
+//                }
+//
+//            }
+//        }
 
 
         // show this toast if there is an error while reading from the database
-        override fun onCancelled(error: DatabaseError) {
-            Toast.makeText(applicationContext, "Could not read from database", Toast.LENGTH_LONG)
-                .show()
-        }
+//        override fun onCancelled(error: DatabaseError) {
+//            Toast.makeText(applicationContext, "Could not read from database", Toast.LENGTH_LONG)
+//                .show()
+//        }
 
     }
 
@@ -177,14 +274,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-
-
+    //Creating map_option menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.map_options, menu)
         return true
     }
 
+    //Mape_option menu options
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         //change the map type based on user's selection
         R.id.normal_map -> {
