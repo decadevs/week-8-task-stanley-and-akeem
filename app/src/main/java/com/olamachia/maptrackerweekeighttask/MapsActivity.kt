@@ -119,6 +119,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+
+
         // show this toast if there is an error while reading from the database
         override fun onCancelled(error: DatabaseError) {
             Toast.makeText(applicationContext, "Could not read from database", Toast.LENGTH_LONG)
@@ -160,6 +162,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val latLng = LatLng(updatedLocation.latitude, updatedLocation.longitude)
             val myFirebaseData = LocationInfo(updatedLocation.latitude, updatedLocation.longitude)
             Log.d("callback", "This is a new location: $updatedLocation")
+
+
             map.clear()
             map.addMarker(
                 MarkerOptions().position(latLng)
