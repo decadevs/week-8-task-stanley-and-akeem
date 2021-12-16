@@ -30,7 +30,7 @@ import com.olamachia.maptrackerweekeighttask.pokemonapp.PokemonActivity
 import java.util.concurrent.TimeUnit
 
 
-//TODO: Try changing myFirebaseData in onLocationResult() to parse all the result from the location request
+
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     lateinit var bottomNavigationView: BottomNavigationView
@@ -284,6 +284,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 }
+//TODO: Push to my personal github repo
 
 
 
