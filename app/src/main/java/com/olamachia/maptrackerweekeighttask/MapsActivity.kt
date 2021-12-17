@@ -173,7 +173,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                         ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.me))
                     // create an object that will specify how the camera will be updated
-                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 18.0f)
+                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)
                     map.moveCamera(update)
                     //Save the location data to the database
                 } else {
@@ -227,7 +227,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title("Stanley is here")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.me))
             )
-            val update = CameraUpdateFactory.newLatLngZoom(latLng, 30.0f)
+            val update = CameraUpdateFactory.newLatLngZoom(latLng, 15.0f)
             map.moveCamera(update)
             dbReference.child("stanley").setValue(myFirebaseData)
         }

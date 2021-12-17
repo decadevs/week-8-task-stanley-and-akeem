@@ -28,6 +28,20 @@ class PokemonActivity : AppCompatActivity() {
 
         val limitText = findViewById<EditText>(R.id.limit_text)
 
+        //initialize the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
+        //set image upload activity selected
+        bottomNavigationView.selectedItemId = R.id.map
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.pokemon -> null
+                R.id.map -> map()
+
+            }
+            true
+        }
+
         // What happens on the red go button click
         findViewById<Button>(R.id.go_btn).setOnClickListener {
 
@@ -76,7 +90,7 @@ class PokemonActivity : AppCompatActivity() {
     // function to set Fragments dynamically
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_holder, fragment)
+            replace(R.id.fragment_holder, fragment).addToBackStack(null)
             commit()
         }
     }
