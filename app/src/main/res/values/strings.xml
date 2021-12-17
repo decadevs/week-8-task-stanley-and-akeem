@@ -7,4 +7,19 @@
     <string name="terrain_map">Terrain Map</string>
     <string name="map_implementation">Map Implementation</string>
     <string name="pokemon_implementation">Pokemon Implementation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="upload">Upload</string>
+    <string name="pokemon">Pokemon</string>
+    <string name="select_an_image">Select an Image</string>
+    <string name="abilities">Abilities</string>
+    <string name="moves">Moves</string>
+    <string name="stats">Stats</string>
+    <string name="show_me">Show Me:</string>
+    <string name="Limit">20</string>
+    <string name="Offset">0</string>
+    <string name="pokemon_starting_from_pokemon_no">Pokemon Starting from Pokemon No:</string>
+    <string name="go">GO</string>
+    <string name="height">"Height: "</string>
+    <string name="weight">Weight:</string>
 </resources>

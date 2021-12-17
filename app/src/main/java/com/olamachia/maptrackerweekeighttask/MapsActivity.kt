@@ -44,6 +44,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // should receive updates, the priority, etc.
     private lateinit var locationRequest: LocationRequest
 
+    // use it to request location updates and get the latest location
+    private lateinit var fusedLocClient: FusedLocationProviderClient
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,9 +79,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(intent)
     }
 
-    private lateinit var fusedLocClient: FusedLocationProviderClient
-    // use it to request location updates and get the latest location
-
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap //initialise map
         getCurrentLocation()
@@ -98,6 +98,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             REQUEST_LOCATION
         )
     }
+
+
 
     companion object {
         private const val REQUEST_LOCATION =
@@ -137,7 +139,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.akeem_rotimi))
                             )
                             //specify how the map camera is updated
-                            val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+                            val update = CameraUpdateFactory.newLatLngZoom(latLng, 18.0f)
                             //update the camera with the CameraUpdate object
                             map.moveCamera(update)
                         } else {
@@ -156,7 +158,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     )
                         .show()
                 }
-
             })
             fusedLocClient.lastLocation.addOnCompleteListener {
                 // lastLocation is a task running in the background
@@ -170,9 +171,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             .title("You are currently here!")
                         //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                     )
-                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.akeem_rotimi))
+                        ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.me))
                     // create an object that will specify how the camera will be updated
-                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 18.0f)
                     map.moveCamera(update)
                     //Save the location data to the database
                 } else {
@@ -226,7 +227,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title("Stanley is here")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.me))
             )
-            val update = CameraUpdateFactory.newLatLngZoom(latLng, 16.0f)
+            val update = CameraUpdateFactory.newLatLngZoom(latLng, 30.0f)
             map.moveCamera(update)
             dbReference.child("stanley").setValue(myFirebaseData)
         }
@@ -279,6 +280,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 //if it doesn`t log an error message
                 Log.e(TAG, "Location permission has been denied")
+                Toast.makeText(this, "This app needs your location to operate its core function, please try granting it location permission in the App section of your device Settings", Toast.LENGTH_LONG).show()
             }
         }
     }

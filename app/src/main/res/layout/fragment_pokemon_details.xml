@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.PokemonDetailsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/image_start_gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <ImageView
+        android:layout_width="@dimen/size_0_dp"
+        android:layout_height="@dimen/size_0_dp"
+        android:src="@drawable/pokemon_logo"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:layout_width="@dimen/size_0_dp"
+        android:layout_height="@dimen/size_0_dp"
+        android:background="@drawable/details_background_gradient"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pokemon_abilities_recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_abilities_tv" />
+
+    <ImageView
+        android:id="@+id/pokemon_details_image"
+        android:layout_width="@dimen/size_100_dp"
+        android:layout_height="@dimen/size_100_dp"
+        android:src="@drawable/ic_baseline_insert_photo_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/image_start_gl" />
+
+    <TextView
+        android:id="@+id/pokemon_details_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_10_dp"
+        android:text="@string/pokemon"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_30_sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_details_image" />
+
+    <TextView
+        android:id="@+id/pokemon_abilities_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/abilities"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weight" />
+
+    <TextView
+        android:id="@+id/moves_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/size_10_dp"
+        android:text="@string/moves"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_abilities_recycler" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pokemon_moves_recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moves_tv" />
+
+    <TextView
+        android:id="@+id/stats_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/size_10_dp"
+        android:text="@string/stats"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_moves_recycler" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pokemon_stats_recycler"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stats_tv" />
+
+    <TextView
+        android:id="@+id/height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size_10_dp"
+        android:text="@string/height"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/height_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pokemon_details_name" />
+
+    <TextView
+        android:id="@+id/height_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size_10_dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/height"
+        app:layout_constraintTop_toTopOf="@id/height" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.16" />
+
+    <TextView
+        android:id="@+id/weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size_10_dp"
+        android:text="@string/weight"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/height" />
+
+    <TextView
+        android:id="@+id/weight_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size_10_dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/weight"
+        app:layout_constraintStart_toEndOf="@+id/weight"
+        app:layout_constraintTop_toTopOf="@id/weight" />
+
+    <TextView
+        android:id="@+id/id_tv"
+        android:layout_width="80dp"
+        android:layout_height="@dimen/size_0_dp"
+        android:textAlignment="textEnd"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:layout_marginEnd="@dimen/size_15_dp"
+        app:layout_constraintBottom_toTopOf="@+id/image_start_gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

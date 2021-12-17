@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/pokemonHome"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/pokemon"/>
+
+    <item
+        android:id="@+id/uploadImage"
+        android:icon="@drawable/ic_baseline_add_photo_24"
+        android:title="@string/upload"/>
+
+</menu>
